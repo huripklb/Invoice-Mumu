@@ -24,5 +24,6 @@ Use these commands in your terminal :
 * npm install --save react-router-dom
 * npm install bootstrap --save
 * npm install --save reactstrap react react-dom
+* npm install react-number-format --save
 
 # ENJOY!
