@@ -25,5 +25,6 @@ Use these commands in your terminal :
 * npm install bootstrap --save
 * npm install --save reactstrap react react-dom
 * npm install react-number-format --save
+* npm i --save @fortawesome/fontawesome-svg-core   npm i --save @fortawesome/free-solid-svg-icons   npm i --save @fortawesome/react-fontawesome
 
 # ENJOY!
