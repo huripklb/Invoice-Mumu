@@ -3,10 +3,14 @@ import './../App.css';
 import { Link } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, Label, Input, ListGroup, ListGroupItem } from 'reactstrap';
 import NumberFormat from 'react-number-format';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Header from '../Layout/Header'
 import Footer from '../Layout/Footer';
 
+library.add(faTimes)
 
 class FormPage extends Component {
   constructor(props) {
@@ -17,7 +21,7 @@ class FormPage extends Component {
       item_name: '',
       quantity: '',
       price: '',
-      counter: 1,
+      counter: 0,
       total_amount: 0
     }
     this.addToList = this.addToList.bind(this);
@@ -29,13 +33,30 @@ class FormPage extends Component {
     })
   }
 
+  handleDelete = (index) => {
+    const total_amount = this.state.total_amount
+    var array = [...this.state.invoiceItems]; // make a separate copy of the array
+    let new_total_amount = Number.parseInt(total_amount, 10) - (Number.parseInt(array[index].quantity, 10) * Number.parseInt(array[index].price, 10))
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({
+        invoiceItems: array,
+        total_amount: new_total_amount
+      });
+    }
+  }
+
   addToList() {
     const invoiceItems = this.state.invoiceItems
     const counter = this.state.counter
     const total_amount = this.state.total_amount
     this.setState({
       invoiceItems: invoiceItems.concat(
-        <ListGroupItem key={ counter }>{ this.state.item_name } | { this.state.quantity } | { this.state.price }</ListGroupItem>
+        {
+          item_name: this.state.item_name, 
+          quantity: this.state.quantity, 
+          price: this.state.price
+        }
       ),
       counter: counter+1,
       total_amount: Number.parseInt(total_amount, 10) + (Number.parseInt(this.state.quantity, 10) * Number.parseInt(this.state.price, 10)),
@@ -51,9 +72,12 @@ class FormPage extends Component {
         <Header />
         <h3>Items : </h3>
         <ListGroup>
-          {this.state.invoiceItems.map(function(item, index) {
-            return item
-          })}
+          {this.state.invoiceItems.map((item, index) => (
+            <ListGroupItem key={ index }>
+              <Button color="secondary" onClick={() => this.handleDelete(index)}><FontAwesomeIcon icon="times" /></Button>&nbsp;
+              { item.item_name } | { item.quantity } | { item.price }
+            </ListGroupItem>
+          ))}
         </ListGroup>
         <p  className="buttonForm">
           Total Amount: <NumberFormat value={ this.state.total_amount } displayType={'text'} thousandSeparator={true} prefix={'Rp. '} />
